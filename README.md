@@ -32,7 +32,7 @@ There is no mock network data. Every block, transaction, fee, and activity value
 
 ## Live Arc Testnet data
 
-The Next.js server route proxies read-only JSON-RPC calls to Arc's official public endpoint. Keeping the RPC call server-side provides one consistent data contract to the UI and allows the endpoint to be replaced through an environment variable without changing client code.
+The Next.js server route proxies read-only JSON-RPC calls to Arc-listed infrastructure providers. Keeping the RPC call server-side provides one consistent data contract to the UI and allows the preferred endpoint to be replaced through an environment variable without changing client code.
 
 Methods currently used:
 
@@ -47,9 +47,11 @@ Default network configuration:
 | --- | --- |
 | Network | Arc Testnet |
 | Chain ID | `5042002` (`0x4CEF52`) |
-| RPC | `https://rpc.testnet.arc.io` |
+| RPC | Official Arc RPC infrastructure with provider failover |
 | Explorer | `https://testnet.arcscan.app` |
 | Native gas asset | USDC |
+
+ArcScope automatically fails over between Arc-listed providers (dRPC, Blockdaemon, QuickNode, then the primary public endpoint). `ARC_RPC_URL` can optionally place a custom provider first in that order.
 
 ## Tech stack
 

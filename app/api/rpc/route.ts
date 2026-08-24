@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 
-const ARC_RPC_URL = process.env.ARC_RPC_URL || "https://rpc.testnet.arc.io";
+const ARC_RPC_ENDPOINTS = [
+  process.env.ARC_RPC_URL,
+  "https://rpc.drpc.testnet.arc.network",
+  "https://rpc.blockdaemon.testnet.arc.network",
+  "https://rpc.quicknode.testnet.arc.network",
+  "https://rpc.testnet.arc.network",
+].filter((endpoint): endpoint is string => Boolean(endpoint));
 const SAMPLE_SIZE = 12;
 
 type RpcResponse<T> = { result?: T; error?: { code: number; message: string } };
@@ -8,24 +14,35 @@ type RawTransaction = { hash: string; from: string; to: string | null; value: st
 type RawBlock = { number: string; timestamp: string; transactions: RawTransaction[]; gasUsed: string; gasLimit: string; hash: string; parentHash: string; miner: string; size: string; baseFeePerGas?: string };
 
 async function rpc<T>(method: string, params: unknown[] = []): Promise<T> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8_000);
-  try {
-    const response = await fetch(ARC_RPC_URL, {
-      method: "POST", headers: {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "user-agent": "ArcScope/1.0 (+https://arcscope.vercel.app)",
-      },
-      body: JSON.stringify({ jsonrpc: "2.0", id: method, method, params }),
-      cache: "no-store", signal: controller.signal,
-    });
-    if (!response.ok) throw new Error(`RPC responded with HTTP ${response.status}`);
-    const payload = (await response.json()) as RpcResponse<T>;
-    if (payload.error) throw new Error(payload.error.message || "Arc RPC error");
-    if (payload.result === undefined) throw new Error(`No result for ${method}`);
-    return payload.result;
-  } finally { clearTimeout(timeout); }
+  let lastError: unknown;
+
+  for (const endpoint of ARC_RPC_ENDPOINTS) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5_000);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST", headers: {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "user-agent": "ArcScope/1.0 (+https://arcscope.vercel.app)",
+        },
+        body: JSON.stringify({ jsonrpc: "2.0", id: method, method, params }),
+        cache: "no-store", signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`RPC responded with HTTP ${response.status}`);
+      const payload = (await response.json()) as RpcResponse<T>;
+      if (payload.error) throw new Error(payload.error.message || "Arc RPC error");
+      if (payload.result === undefined) throw new Error(`No result for ${method}`);
+      return payload.result;
+    } catch (error) {
+      lastError = error;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("All Arc RPC providers are unavailable");
 }
 
 const hexToNumber = (value?: string | null) => (value ? Number.parseInt(value, 16) : 0);

@@ -2,6 +2,8 @@
 
 **Live intelligence for Arc Testnet.**
 
+**Live dashboard:** [arcscope.vercel.app](https://arcscope.vercel.app/)
+
 ArcScope is an independent, community-built network analytics dashboard that turns live Arc Testnet JSON-RPC data into a clear, responsive view of blocks, transaction activity, gas demand, and network health.
 
 It was created by a **designer exploring AI-assisted development and Web3**—a practical experiment in using design experience and vibe coding to turn an idea into a functioning onchain product. ArcScope is not affiliated with or endorsed by Circle.

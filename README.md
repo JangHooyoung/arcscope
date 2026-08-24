@@ -53,6 +53,13 @@ Default network configuration:
 
 ArcScope automatically fails over between Arc-listed providers (dRPC, Blockdaemon, QuickNode, then the primary public endpoint). `ARC_RPC_URL` can optionally place a custom provider first in that order.
 
+Default failover order:
+
+1. `https://rpc.drpc.testnet.arc.io`
+2. `https://rpc.blockdaemon.testnet.arc.io`
+3. `https://rpc.quicknode.testnet.arc.io`
+4. `https://rpc.testnet.arc.io`
+
 ## Tech stack
 
 - Next.js 16 (App Router)
@@ -67,7 +74,7 @@ ArcScope automatically fails over between Arc-listed providers (dRPC, Blockdaemo
 Requirements: Node.js 20.9 or later and npm.
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/JangHooyoung/arcscope.git
 cd arcscope
 npm install
 cp .env.example .env.local
@@ -97,6 +104,7 @@ arcscope/
 │   └── page.tsx           # Dashboard, activity views, and block details
 ├── public/
 │   └── og.png             # ArcScope social preview
+├── docs/screenshots/      # Live desktop and mobile deployment captures
 ├── .env.example
 └── package.json
 ```
@@ -115,7 +123,8 @@ No database, wallet key, or secret is required. Never commit private keys or wal
 ## Official Arc resources
 
 - [Arc documentation](https://docs.arc.io)
-- [Connect to Arc](https://docs.arc.io/arc/references/connect-to-arc)
+- [Connect to Arc](https://docs.arc.io/integrate/connect-to-arc)
+- [RPC endpoints](https://docs.arc.io/arc/references/rpc-endpoints)
 - [Gas and fees](https://docs.arc.io/arc/references/gas-and-fees)
 - [Arc Testnet Explorer](https://testnet.arcscan.app)
 - [Circle Faucet](https://faucet.circle.com)
@@ -123,12 +132,9 @@ No database, wallet key, or secret is required. Never commit private keys or wal
 
 ## Screenshots
 
-Add final deployment captures here before sharing the repository:
-
-```md
 ![ArcScope desktop dashboard](docs/screenshots/desktop.png)
+
 ![ArcScope mobile dashboard](docs/screenshots/mobile.png)
-```
 
 ## License
 

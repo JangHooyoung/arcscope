@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 
 const ARC_RPC_ENDPOINTS = [
   process.env.ARC_RPC_URL,
-  "https://rpc.drpc.testnet.arc.network",
-  "https://rpc.blockdaemon.testnet.arc.network",
-  "https://rpc.quicknode.testnet.arc.network",
-  "https://rpc.testnet.arc.network",
+  "https://rpc.drpc.testnet.arc.io",
+  "https://rpc.blockdaemon.testnet.arc.io",
+  "https://rpc.quicknode.testnet.arc.io",
+  "https://rpc.testnet.arc.io",
 ].filter((endpoint): endpoint is string => Boolean(endpoint));
 const SAMPLE_SIZE = 12;
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const ARC_RPC_URL = process.env.ARC_RPC_URL || "https://rpc.testnet.arc.network";
+const ARC_RPC_URL = process.env.ARC_RPC_URL || "https://rpc.testnet.arc.io";
 const SAMPLE_SIZE = 12;
 
 type RpcResponse<T> = { result?: T; error?: { code: number; message: string } };
@@ -12,7 +12,11 @@ async function rpc<T>(method: string, params: unknown[] = []): Promise<T> {
   const timeout = setTimeout(() => controller.abort(), 8_000);
   try {
     const response = await fetch(ARC_RPC_URL, {
-      method: "POST", headers: { "content-type": "application/json" },
+      method: "POST", headers: {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "user-agent": "ArcScope/1.0 (+https://arcscope.vercel.app)",
+      },
       body: JSON.stringify({ jsonrpc: "2.0", id: method, method, params }),
       cache: "no-store", signal: controller.signal,
     });

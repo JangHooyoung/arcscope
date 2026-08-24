@@ -47,7 +47,7 @@ Default network configuration:
 | --- | --- |
 | Network | Arc Testnet |
 | Chain ID | `5042002` (`0x4CEF52`) |
-| RPC | `https://rpc.testnet.arc.network` |
+| RPC | `https://rpc.testnet.arc.io` |
 | Explorer | `https://testnet.arcscan.app` |
 | Native gas asset | USDC |
 
